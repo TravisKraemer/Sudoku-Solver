@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1486859280 source:f:\onedrive\programming projects\sudoku\sudoko solver\main.cpp
+	<iostream>
+	<fstream>
+
+1486859280 source:c:\gdrive\onedrive\programming projects\sudoku\sudoko solver\main.cpp
+	<iostream>
+	<fstream>
+
