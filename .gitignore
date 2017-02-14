@@ -53,3 +53,8 @@ Temporary Items
 .exe
 .o
 doxyfile
+*.exe
+Sudoko Solver/Sudoko Solver.cbp
+*.o
+*.depend
+*.layout
