@@ -6,26 +6,64 @@ using namespace std;
 bool Solve(int in[9][9], int out[9][9], int start);
 bool CheckOne(int in[9][9], int pos);
 int ValidSolution(int in[9][9]);
+bool GeneratePossibleNums(int sudokuBoard[9][9], int possibleNums[9][9][10]);
 
 int main()
 {
-    ifstream inFile("Sudoku2.txt");
+    ifstream inFile("Sudoku3.txt");
     int sudokuBoard[9][9];
     int solvedBoard[9][9];
+    int possibleNums[9][9][10];
     for(int i = 0; i < 9; i++)
         for(int j = 0; j < 9; j++)
             inFile >> sudokuBoard[i][j];
-   Solve(sudokuBoard, solvedBoard, 0);
-   cout << (ValidSolution(solvedBoard) == 0 ? "true" : "false") << endl;
+    if(GeneratePossibleNums(sudokuBoard, possibleNums))
+    {
+        for(int i = 0; i < 9; i++)
+            {
+                for(int j = 0; j < 9; j++)
+                    cout << sudokuBoard[i][j] << " ";
+                cout << endl;
+            }
+        if(ValidSolution(sudokuBoard) == 0)
+        {
+            cout << (ValidSolution(solvedBoard) == 0 ? "true" : "false") << endl;
+            for(int i = 0; i < 9; i++)
+            {
+                for(int j = 0; j < 9; j++)
+                    cout << sudokuBoard[i][j] << " ";
+                cout << endl;
+            }
+            CheckOne(solvedBoard, 5);
+        }
+        else{
+            double numPossible = 1;
+            for(int i = 0; i < 9; i++)
+            {
+                for(int j = 0; j < 9; j++)
+                {
+                    cout << i << " " << j << ": ";
+                    numPossible *= possibleNums[i][j][0];
+                    for(int k = 1; k <= possibleNums[i][j][0]; k++)
+                        cout << possibleNums[i][j][k] << " ";
+                    cout << endl;
+                }
+            }
+            cout << "Number of combinations:" << numPossible << endl;
+            cout << "Non easy Board" << endl;
+        }
+    }
+    else
+        cout << "Impossible Board" << endl;
+    Solve(sudokuBoard, solvedBoard, 0);
     for(int i = 0; i < 9; i++)
     {
         for(int j = 0; j < 9; j++)
             cout << solvedBoard[i][j] << " ";
         cout << endl;
     }
-    CheckOne(solvedBoard, 5);
     return 0;
-}
+    }
 
 bool Solve(int in[9][9], int out[9][9], int start)
 {
@@ -96,5 +134,50 @@ int ValidSolution(int in[9][9])
         if(!CheckOne(in, i))
             numErrors++;
     return numErrors;
+}
 
+
+//-------------------------------------------------------------------------------------------------
+// Takes in a 9x9 sudokuBoard with 0s in empty positions. This function will put any numbers in
+// the board where there is only one choice. possibleNums will contain a list of numbers that work
+// in each square. If the board has any squares with no choices, then it will return false.
+// Otherwise true is returned
+// params(inout, out)
+// sudokuBoard - 9x9 array
+// possibleNums - 9x9x10 array ([][][0] indicates number of possible nums, the rest is a list of
+// nums that work)
+//-------------------------------------------------------------------------------------------------
+bool GeneratePossibleNums(int sudokuBoard[9][9], int possibleNums[9][9][10])
+{
+    for(int i = 0; i < 9; i++)
+        for(int j = 0; j < 9; j++)
+        {
+            if(sudokuBoard[i][j] == 0)
+            {
+                possibleNums[i][j][0] = 0;
+                for(int k = 1; k <= 9; k++)
+                {
+                    sudokuBoard[i][j] = k;//Try with k in the place
+                    if(CheckOne(sudokuBoard, (i) * 9 + j )) //was it a valid number??
+                    {
+                        possibleNums[i][j][++possibleNums[i][j][0]] = k;//add to list of possibilities
+                    }
+                }
+                if(possibleNums[i][j][0] == 0)
+                    return false;
+                else if(possibleNums[i][j][0] == 1) //only one choice, use it
+                {
+                    sudokuBoard[i][j] = possibleNums[i][j][1];
+                    i = j = 0;//restart loop using new info
+                }
+                else
+                    sudokuBoard[i][j] = 0; //can't replace it
+            }
+            else
+            {
+                possibleNums[i][j][0] = 1; //already known
+                possibleNums[i][j][1] = sudokuBoard[i][j];
+            }
+        }
+        return true;
 }
