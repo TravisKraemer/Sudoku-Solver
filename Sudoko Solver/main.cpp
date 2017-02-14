@@ -27,7 +27,6 @@ int main()
             }
         if(ValidSolution(sudokuBoard) == 0)
         {
-            cout << (ValidSolution(solvedBoard) == 0 ? "true" : "false") << endl;
             for(int i = 0; i < 9; i++)
             {
                 for(int j = 0; j < 9; j++)
