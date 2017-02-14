@@ -5,18 +5,18 @@ using namespace std;
 
 bool Solve(int in[9][9], int out[9][9], int start);
 bool CheckOne(int in[9][9], int pos);
-bool validSolution(int in[9][9]);
+int ValidSolution(int in[9][9]);
 
 int main()
 {
-    ifstream inFile("Sudoku3.txt");
+    ifstream inFile("Sudoku2.txt");
     int sudokuBoard[9][9];
     int solvedBoard[9][9];
     for(int i = 0; i < 9; i++)
         for(int j = 0; j < 9; j++)
             inFile >> sudokuBoard[i][j];
    Solve(sudokuBoard, solvedBoard, 0);
-   cout << validSolution(solvedBoard) << endl;
+   cout << (ValidSolution(solvedBoard) == 0 ? "true" : "false") << endl;
     for(int i = 0; i < 9; i++)
     {
         for(int j = 0; j < 9; j++)
@@ -33,7 +33,7 @@ bool Solve(int in[9][9], int out[9][9], int start)
         start++;
     if(start >= 81)
     {
-        if(validSolution(in))
+        if(ValidSolution(in) == 0)
         {
             for(int k = 0; k < 9; k++)
                 for(int l = 0; l < 9; l++)
@@ -63,14 +63,6 @@ bool Solve(int in[9][9], int out[9][9], int start)
     return false;
 }
 
-bool validSolution(int in[9][9])
-{
-    for(int i = 0; i < 81; i++)
-        if(!CheckOne(in, i))
-            return false;
-    return true;
-}
-
 bool CheckOne(int in[9][9], int pos)
 {
     int row = pos / 9;
@@ -94,4 +86,15 @@ bool CheckOne(int in[9][9], int pos)
                 return false;
         }
     return true;
+}
+
+
+int ValidSolution(int in[9][9])
+{
+    int numErrors = 0;
+    for(int i = 0; i < 81; i++)
+        if(!CheckOne(in, i))
+            numErrors++;
+    return numErrors;
+
 }
