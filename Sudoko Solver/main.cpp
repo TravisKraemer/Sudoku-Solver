@@ -63,8 +63,16 @@ int main()
         cout << endl;
     }
     return 0;
-    }
+}
 
+//-------------------------------------------------------------------------------------------------
+// Solves the Sudoku board by recursion and brute force.
+// Returns true if solved, false otherwise
+// params(in,out,in)
+// in - the 9x9 Sudoku Board to solve
+// out - the 9x9 Sudoku Board solved
+// start - position to start from
+//-------------------------------------------------------------------------------------------------
 bool Solve(int in[9][9], int out[9][9], int start)
 {
     while(in[start / 9][start % 9] != 0 && start < 81)
@@ -101,6 +109,12 @@ bool Solve(int in[9][9], int out[9][9], int start)
     return false;
 }
 
+//-------------------------------------------------------------------------------------------------
+// Check if the square at pos is invalid.
+// params(in, in)
+// in - the 9x9 Sudoku board
+// pos - position to check
+//-------------------------------------------------------------------------------------------------
 bool CheckOne(int in[9][9], int pos)
 {
     int row = pos / 9;
@@ -126,7 +140,10 @@ bool CheckOne(int in[9][9], int pos)
     return true;
 }
 
-
+//-------------------------------------------------------------------------------------------------
+// Checks if the board is a valid solution.
+// in - the 9x9 Sudoku board to check
+//-------------------------------------------------------------------------------------------------
 int ValidSolution(int in[9][9])
 {
     int numErrors = 0;
