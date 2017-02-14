@@ -47,14 +47,10 @@ Temporary Items
 .apdisk
 
 #Code::Blocks Files
-.cbp
-.depend
-.layout
-.exe
-.o
-doxyfile
-*.exe
-Sudoko Solver/Sudoko Solver.cbp
-*.o
+*.cbp
 *.depend
 *.layout
+*.exe
+*.o
+doxyfile
+
