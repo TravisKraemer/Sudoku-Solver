@@ -3,7 +3,7 @@
 
 using namespace std;
 
-bool Solve(int in[9][9], int out[9][9], int start);
+bool Solve(int in[9][9], int possible[9][9][10], int out[9][9], int start);
 bool CheckOne(int in[9][9], int pos);
 int ValidSolution(int in[9][9]);
 bool GeneratePossibleNums(int sudokuBoard[9][9], int possibleNums[9][9][10]);
@@ -54,7 +54,7 @@ int main()
     }
     else
         cout << "Impossible Board" << endl;
-    Solve(sudokuBoard, solvedBoard, 0);
+    Solve(sudokuBoard, possibleNums, solvedBoard, 0);
     for(int i = 0; i < 9; i++)
     {
         for(int j = 0; j < 9; j++)
@@ -69,10 +69,11 @@ int main()
 // Returns true if solved, false otherwise
 // params(in,out,in)
 // in - the 9x9 Sudoku Board to solve
+// possible - a 9x9x10 array specifying which numbers are possible for each square
 // out - the 9x9 Sudoku Board solved
 // start - position to start from
 //-------------------------------------------------------------------------------------------------
-bool Solve(int in[9][9], int out[9][9], int start)
+bool Solve(int in[9][9], int possible[9][9][10], int out[9][9], int start)
 {
     while(in[start / 9][start % 9] != 0 && start < 81)
         start++;
@@ -90,13 +91,14 @@ bool Solve(int in[9][9], int out[9][9], int start)
     for(int k = 0; k < 9; k++)
             for(int l = 0; l < 9; l++)
                 out[k][l] = in[k][l];
-    for( int i = 1; i <= 9; i++)
+    //Try the possibilities generated previously.
+    for( int i = 1; i <= possible[start / 9][start % 9][0]; i++)
     {
-        out[start / 9][start % 9] = i;
+        out[start / 9][start % 9] = possible[start / 9][start % 9][i];
         if(CheckOne(out, start))
         {
             int newBoard[9][9];
-            if(Solve(out, newBoard, start + 1))
+            if(Solve(out, possible, newBoard, start + 1))
             {
                 for(int k = 0; k < 9; k++)
                     for(int l = 0; l < 9; l++)
